@@ -3,6 +3,7 @@ package ru.alexraydev.model;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.validator.constraints.NotBlank;
+import ru.alexraydev.HasId;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "restaurants")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "restaurants")
-public class Restaurant{
+public class Restaurant implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.annotations.Cache;
+import ru.alexraydev.HasId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(
         columnNames = {"id", "restaurant_id"}, name = "dishes_unique_id_restaurant_id_idx")})
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "dishes")
-public class Dish{
+public class Dish implements HasId{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

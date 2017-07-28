@@ -2,6 +2,7 @@ package ru.alexraydev.model;
 
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
+import ru.alexraydev.HasId;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "user_votes", uniqueConstraints = {@UniqueConstraint(
         name = "user_votes_unique_user_datetime_idx", columnNames = {"user_id", "date_time"})})
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "uservotes")
-public class UserVote {
+public class UserVote implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

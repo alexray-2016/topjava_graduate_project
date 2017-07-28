@@ -4,6 +4,7 @@ import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import ru.alexraydev.HasId;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(name = "users_unique_email_idx", columnNames = "email")})
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "users")
-public class User{
+public class User implements HasId{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
