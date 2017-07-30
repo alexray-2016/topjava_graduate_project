@@ -1,5 +1,6 @@
 package ru.alexraydev.model;
 
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.validator.constraints.Email;
@@ -9,12 +10,14 @@ import ru.alexraydev.HasId;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(name = "users_unique_email_idx", columnNames = "email")})
+//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "users")
-public class User implements HasId{
+public class User implements HasId, Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +36,8 @@ public class User implements HasId{
     private String password;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<UserVote> votes;
+    @JsonIgnore
+    protected List<UserVote> votes;
 
     @Column(name = "is_admin", nullable = false, unique = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean isAdmin;
@@ -108,7 +112,6 @@ public class User implements HasId{
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", number of votes=" + votes.size() +
                 ", isAdmin=" + isAdmin +
                 '}';
     }

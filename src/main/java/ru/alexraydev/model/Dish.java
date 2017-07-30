@@ -9,12 +9,13 @@ import ru.alexraydev.HasId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(
         columnNames = {"id", "restaurant_id"}, name = "dishes_unique_id_restaurant_id_idx")})
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "dishes")
-public class Dish implements HasId{
+public class Dish implements HasId, Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

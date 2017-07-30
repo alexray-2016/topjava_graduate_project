@@ -1,5 +1,8 @@
 package ru.alexraydev.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 import ru.alexraydev.HasId;
@@ -8,13 +11,15 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_votes", uniqueConstraints = {@UniqueConstraint(
         name = "user_votes_unique_user_datetime_idx", columnNames = {"user_id", "date_time"})})
+//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "uservotes")
-public class UserVote implements HasId {
+public class UserVote implements HasId, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

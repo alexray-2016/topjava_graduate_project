@@ -46,7 +46,7 @@ public class UserRepositoryImpl implements UserRepository{
     @SuppressWarnings("unchecked")
     @Override
     public List<User> getAll() {
-        Query query = em.createQuery("SELECT u FROM User u JOIN FETCH u.votes AS uservotes");
+        Query query = em.createQuery("SELECT u FROM User u");//JOIN FETCH u.votes AS uservotes
         return query.getResultList();
     }
 }

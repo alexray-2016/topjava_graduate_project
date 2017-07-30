@@ -1,5 +1,6 @@
 package ru.alexraydev.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.validator.constraints.NotBlank;
@@ -8,13 +9,14 @@ import ru.alexraydev.HasId;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.List;
 
 
 @Entity
 @Table(name = "restaurants")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "restaurants")
-public class Restaurant implements HasId {
+public class Restaurant implements HasId, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,6 +27,7 @@ public class Restaurant implements HasId {
     private String name;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant")
+    @JsonIgnore
     private List<Dish> dishList;
 
     public Restaurant() {

@@ -44,7 +44,7 @@ public class UserVoteRepositoryImpl implements UserVoteRepository{
     @SuppressWarnings("unchecked")
     @Override
     public List<UserVote> getAll() {
-        Query query = em.createQuery("SELECT uv FROM UserVote");
+        Query query = em.createQuery("SELECT uv FROM UserVote uv");
         return query.getResultList();
     }
 }

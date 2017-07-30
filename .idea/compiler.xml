@@ -26,5 +26,8 @@
         <module name="topjava_graduate_project" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="topjava_graduate_project" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
