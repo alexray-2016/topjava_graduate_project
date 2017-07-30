@@ -26,7 +26,7 @@ public class Restaurant implements HasId, Serializable {
     @NotBlank
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @JsonIgnore
     private List<Dish> dishList;
 
