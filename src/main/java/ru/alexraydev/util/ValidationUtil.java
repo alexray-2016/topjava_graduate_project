@@ -1,7 +1,13 @@
 package ru.alexraydev.util;
 
 import ru.alexraydev.HasId;
+import ru.alexraydev.model.UserVote;
 import ru.alexraydev.util.exception.NotFoundException;
+import ru.alexraydev.util.exception.UserVoteIncorrectDateException;
+import ru.alexraydev.util.exception.UserVoteTooLateException;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class ValidationUtil {
     private ValidationUtil () {
@@ -41,4 +47,21 @@ public class ValidationUtil {
             throw new IllegalArgumentException(bean + " must be with id=" + id);
         }
     }
+
+    public static void checkDateConsistent(UserVote userVote) {
+        if (userVote.getDate() == null) {
+            userVote.setDate(LocalDate.now());
+        }
+        else if (!userVote.getDate().isEqual(LocalDate.now())) {
+            throw new UserVoteIncorrectDateException(userVote + " must be with date=" + LocalDate.now());
+        }
+
+        if (userVote.getTime() == null) {
+            userVote.setTime(LocalTime.now());
+        }
+        if (userVote.getTime().isAfter(LocalTime.of(11, 0))) {
+            throw new UserVoteTooLateException("It is too late, vote can't be changed");
+        }
+    }
+
 }

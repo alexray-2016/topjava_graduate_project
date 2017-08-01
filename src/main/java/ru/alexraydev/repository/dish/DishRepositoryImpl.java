@@ -34,6 +34,7 @@ public class DishRepositoryImpl implements DishRepository{
     }
 
     @Override
+    @Transactional
     public boolean delete(int id) {
         Query query = em.createQuery("DELETE FROM Dish d WHERE d.id=:id");
         return query.setParameter("id", id).executeUpdate() != 0;
@@ -42,7 +43,7 @@ public class DishRepositoryImpl implements DishRepository{
     @SuppressWarnings("unchecked")
     @Override
     public List<Dish> getAll() {
-        Query query = em.createQuery("SELECT d FROM Dish d");
+        Query query = em.createQuery("SELECT d FROM Dish d");// JOIN FETCH d.restaurant AS restaurants
         return query.getResultList();
     }
 }

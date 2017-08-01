@@ -1,5 +1,6 @@
 package ru.alexraydev.model;
 
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -14,11 +15,12 @@ import java.io.Serializable;
 @Entity
 @Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(
         columnNames = {"id", "restaurant_id"}, name = "dishes_unique_id_restaurant_id_idx")})
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "dishes")
 public class Dish implements HasId, Serializable{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "name", nullable = false, unique = false)
@@ -29,10 +31,12 @@ public class Dish implements HasId, Serializable{
     @NotNull
     private int price;
 
+    //@JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
+    //@JsonIgnore
     private Restaurant restaurant;
 
     public Dish() {
@@ -81,13 +85,24 @@ public class Dish implements HasId, Serializable{
         this.restaurant = restaurant;
     }
 
+    /*@JsonProperty("restaurantId")
+    public Integer getRestaurantId() {
+        return restaurant == null ? null : restaurant.getId();
+    }*/
+
+    /*@JsonSetter("restaurantId")
+    public void setRestaurant(int restaurantId) {
+        Restaurant r = new Restaurant();
+        r.setId(restaurantId);
+        this.restaurant = r;
+    }*/
+
     @Override
     public String toString() {
         return "Dish{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
-                ", restaurant=" + restaurant +
                 '}';
     }
 }

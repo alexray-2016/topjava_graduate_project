@@ -1,6 +1,7 @@
 package ru.alexraydev.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.*;
@@ -12,21 +13,27 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "user_votes", uniqueConstraints = {@UniqueConstraint(
-        name = "user_votes_unique_user_datetime_idx", columnNames = {"user_id", "date_time"})})
+        name = "user_votes_unique_user_date_idx", columnNames = {"user_id", "date"})})
 //@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "uservotes")
 public class UserVote implements HasId, Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "date_time", columnDefinition = "TIMESTAMP DEFAULT NOW")
-    private LocalDateTime dateTime;
+    @Column(name = "date", columnDefinition = "DATE DEFAULT CURRENT_DATE")
+    private LocalDate date;
+
+    @Column(name = "time", columnDefinition = "TIME DEFAULT CURRENT_TIME")
+    @JsonIgnore
+    private LocalTime time;
 
     @Column(name = "chosen_restaurant_id", nullable = false, unique = false)
     @NotNull
@@ -36,6 +43,7 @@ public class UserVote implements HasId, Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
+    @JsonIgnore
     private User user;
 
     public UserVote() {
@@ -51,20 +59,30 @@ public class UserVote implements HasId, Serializable {
         this(null, chosenRestaurantId, user);
     }
 
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public Integer getChosenRestaurantId() {
@@ -87,9 +105,9 @@ public class UserVote implements HasId, Serializable {
     public String toString() {
         return "UserVote{" +
                 "id=" + id +
-                ", dateTime=" + dateTime +
+                ", date=" + date +
+                ", time=" + time +
                 ", chosenRestaurantId=" + chosenRestaurantId +
-                ", user=" + user +
                 '}';
     }
 }

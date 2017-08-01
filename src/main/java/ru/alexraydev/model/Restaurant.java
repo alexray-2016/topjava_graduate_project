@@ -1,6 +1,9 @@
 package ru.alexraydev.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.validator.constraints.NotBlank;
@@ -15,19 +18,20 @@ import java.util.List;
 
 @Entity
 @Table(name = "restaurants")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "restaurants")
 public class Restaurant implements HasId, Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "name", nullable = false, unique = false)
     @NotBlank
     private String name;
 
+    //@JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    @JsonIgnore
     private List<Dish> dishList;
 
     public Restaurant() {
@@ -72,7 +76,6 @@ public class Restaurant implements HasId, Serializable {
         return "Restaurant{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", dishList=" + dishList +
                 '}';
     }
 }

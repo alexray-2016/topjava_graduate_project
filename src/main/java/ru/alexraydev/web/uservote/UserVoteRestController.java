@@ -19,14 +19,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping(UserVoteRestController.REST_URL)
-public class UserVoteRestController implements GenericRestController<UserVote>{
+public class UserVoteRestController/* implements GenericRestController<UserVote>*/{
 
     static final String REST_URL = "/rest/uservotes";
 
     @Autowired
     private UserVoteService userVoteService;
 
-    @Override
+   /* @Override
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserVote> save(@RequestBody UserVote entity) {
         ValidationUtil.checkNew(entity);
@@ -36,9 +36,9 @@ public class UserVoteRestController implements GenericRestController<UserVote>{
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
-    }
+    }*/
 
-    @Override
+    /*@Override
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserVote> update(int id, UserVote entity) throws NotFoundException {
         ValidationUtil.checkIdConsistent(entity, id);
@@ -51,9 +51,9 @@ public class UserVoteRestController implements GenericRestController<UserVote>{
 
         userVoteService.update(userVote);
         return new ResponseEntity<>(userVote, HttpStatus.OK);
-    }
+    }*/
 
-    @Override
+    /*@Override
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserVote> getById(int id) throws NotFoundException {
         UserVote userVote = userVoteService.getById(id);
@@ -63,9 +63,9 @@ public class UserVoteRestController implements GenericRestController<UserVote>{
         else {
             return new ResponseEntity<>(userVote, HttpStatus.OK);
         }
-    }
+    }*/
 
-    @Override
+    /*@Override
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<UserVote> delete(int id) throws NotFoundException {
         UserVote userVote = userVoteService.getById(id);
@@ -80,5 +80,5 @@ public class UserVoteRestController implements GenericRestController<UserVote>{
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserVote>> getAll() {
         return new ResponseEntity<List<UserVote>>(userVoteService.getAll(), HttpStatus.OK);
-    }
+    }*/
 }
