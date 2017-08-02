@@ -33,7 +33,7 @@ public class UserRestController {
     public ResponseEntity<UserVote> save(@RequestBody UserVote entity) {
         ValidationUtil.checkNew(entity);
 
-        UserVote created = userVoteService.save(entity, AuthorizedUser.getId());
+        UserVote created = userVoteService.save(entity, AuthorizedUser.id());
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/vote")
                 .buildAndExpand(created.getId()).toUri();
@@ -44,28 +44,28 @@ public class UserRestController {
     public ResponseEntity<UserVote> update(@RequestBody UserVote entity) throws NotFoundException {
         ValidationUtil.checkDateConsistent(entity);
         ValidationUtil.checkTimeConsistent(entity);
-        UserVote userVote = userVoteService.getTodaysVote(AuthorizedUser.getId());
+        UserVote userVote = userVoteService.getTodaysVote(AuthorizedUser.id());
         ValidationUtil.checkIdConsistent(entity, userVote.getId());
         userVote.setDate(entity.getDate());
         userVote.setTime(entity.getTime());
         userVote.setChosenRestaurantId(entity.getChosenRestaurantId());
         userVote.setUser(entity.getUser());
 
-        userVoteService.update(userVote, AuthorizedUser.getId());
+        userVoteService.update(userVote, AuthorizedUser.id());
         return new ResponseEntity<>(userVote, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/vote")
     public ResponseEntity<UserVote> delete() throws NotFoundException {
-        UserVote userVote = userVoteService.getTodaysVote(AuthorizedUser.getId());
+        UserVote userVote = userVoteService.getTodaysVote(AuthorizedUser.id());
         ValidationUtil.checkTimeConsistent(userVote);
-        userVoteService.delete(userVote.getId(), AuthorizedUser.getId());
+        userVoteService.delete(userVote.getId(), AuthorizedUser.id());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(value = "/vote", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserVote> getTodaysVote() throws NotFoundException {
-        UserVote userVote = userVoteService.getTodaysVote(AuthorizedUser.getId());
+        UserVote userVote = userVoteService.getTodaysVote(AuthorizedUser.id());
         return new ResponseEntity<>(userVote, HttpStatus.OK);
     }
 

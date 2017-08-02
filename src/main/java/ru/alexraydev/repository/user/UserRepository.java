@@ -5,4 +5,6 @@ import ru.alexraydev.repository.GenericRepository;
 
 public interface UserRepository extends GenericRepository<User>{
 
+    //null if not found
+    User getByEmail(String email);
 }

@@ -1,8 +1,9 @@
 DROP INDEX users_unique_email_idx IF EXISTS;
-DROP INDEX user_votes_unique_user_datetime_idx IF EXISTS;
+DROP INDEX user_votes_unique_user_date_idx IF EXISTS;
 DROP TABLE dishes IF EXISTS;
 DROP TABLE user_votes IF EXISTS;
 DROP TABLE restaurants IF EXISTS;
+DROP TABLE user_roles IF EXISTS;
 DROP TABLE users IF EXISTS;
 
 CREATE TABLE users
@@ -11,10 +12,17 @@ CREATE TABLE users
   name             VARCHAR(255) NOT NULL,
   email            VARCHAR(255) NOT NULL,
   password         VARCHAR(255) NOT NULL,
-  is_admin          BOOLEAN DEFAULT FALSE,
   PRIMARY KEY(id)
 );
 CREATE UNIQUE INDEX users_unique_email_idx ON users(email);
+
+CREATE TABLE user_roles
+(
+  user_id INTEGER NOT NULL,
+  role    VARCHAR(255),
+  CONSTRAINT user_roles_idx UNIQUE (user_id, role),
+  FOREIGN KEY ( user_id ) REFERENCES users(id) ON DELETE CASCADE
+);
 
 CREATE TABLE restaurants
 (

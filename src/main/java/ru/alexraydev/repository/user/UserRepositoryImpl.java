@@ -1,6 +1,7 @@
 package ru.alexraydev.repository.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alexraydev.model.User;
@@ -48,5 +49,14 @@ public class UserRepositoryImpl implements UserRepository{
     public List<User> getAll() {
         Query query = em.createQuery("SELECT u FROM User u");//JOIN FETCH u.votes AS uservotes
         return query.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public User getByEmail(String email) {
+        List<User> users = em.createQuery("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.email=:email")
+                .setParameter("email", email)
+                .getResultList();
+        return DataAccessUtils.singleResult(users);
     }
 }

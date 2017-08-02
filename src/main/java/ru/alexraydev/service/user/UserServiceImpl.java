@@ -3,7 +3,12 @@ package ru.alexraydev.service.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import ru.alexraydev.AuthorizedUser;
 import ru.alexraydev.model.Restaurant;
 import ru.alexraydev.model.User;
 import ru.alexraydev.repository.restaurant.RestaurantRepository;
@@ -14,8 +19,8 @@ import java.util.List;
 
 import static ru.alexraydev.util.ValidationUtil.*;
 
-@Service
-public class UserServiceImpl implements UserService{
+@Service("userService")
+public class UserServiceImpl implements UserService, UserDetailsService{
 
     private UserRepository userRepository;
 
@@ -56,5 +61,20 @@ public class UserServiceImpl implements UserService{
     @CacheEvict(value = "users", allEntries = true)
     @Override
     public void evictCache() {
+    }
+
+    @Override
+    public User getByEmail(String email) throws NotFoundException {
+        Assert.notNull(email, "email must not be null");
+        return checkNotFound(userRepository.getByEmail(email), "email=" + email);
+    }
+
+    @Override
+    public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.getByEmail(email.toLowerCase());
+        if (user == null) {
+            throw new UsernameNotFoundException("User " + email + " is not found");
+        }
+        return new AuthorizedUser(user);
     }
 }

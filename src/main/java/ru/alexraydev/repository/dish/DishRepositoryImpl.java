@@ -43,7 +43,7 @@ public class DishRepositoryImpl implements DishRepository{
     @SuppressWarnings("unchecked")
     @Override
     public List<Dish> getAll() {
-        Query query = em.createQuery("SELECT d FROM Dish d LEFT JOIN FETCH d.restaurant AS restaurants");//
+        Query query = em.createQuery("SELECT d FROM Dish d LEFT JOIN FETCH d.restaurant AS restaurants");
         return query.getResultList();
     }
 }

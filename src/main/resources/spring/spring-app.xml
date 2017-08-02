@@ -9,6 +9,7 @@
        http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <import resource="spring-tools.xml"/>
+    <import resource="spring-security.xml"/>
 
     <context:annotation-config/>
 

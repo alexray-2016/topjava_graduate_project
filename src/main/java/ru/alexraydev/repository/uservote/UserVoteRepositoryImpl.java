@@ -1,5 +1,6 @@
 package ru.alexraydev.repository.uservote;
 
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alexraydev.model.User;
@@ -38,12 +39,13 @@ public class UserVoteRepositoryImpl implements UserVoteRepository{
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public UserVote getTodaysVote(int userId) {
-        return (UserVote)em.createQuery("SELECT uv FROM UserVote uv WHERE uv.user.id=:userId AND uv.date=:date")
+        List<UserVote> userVotes = em.createQuery("SELECT uv FROM UserVote uv WHERE uv.user.id=:userId AND uv.date=:date")
                 .setParameter("userId", userId)
-                .setParameter("date", LocalDate.now())
-                .getSingleResult();
+                .setParameter("date", LocalDate.now()).getResultList();
+        return DataAccessUtils.singleResult(userVotes);
     }
 
     /*@Override

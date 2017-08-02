@@ -5,13 +5,14 @@ import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.util.CollectionUtils;
 import ru.alexraydev.HasId;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(name = "users_unique_email_idx", columnNames = "email")})
@@ -39,22 +40,36 @@ public class User implements HasId, Serializable{
     @JsonIgnore
     protected List<UserVote> votes;
 
-    @Column(name = "is_admin", nullable = false, unique = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private boolean isAdmin;
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    @ElementCollection(fetch = FetchType.EAGER)
+//    @Fetch(FetchMode.SUBSELECT)
+    @BatchSize(size = 200)
+    private Set<Role> roles;
 
     public User() {
     }
 
-    public User(Integer id, String name, String email, String password, boolean isAdmin) {
+    public User(Integer id, String name, String email, String password, Collection<Role> roles) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.isAdmin = isAdmin;
+        setRoles(roles);
     }
 
-    public User(String name, String email, String password, boolean isAdmin) {
-        this(null, name, email, password, isAdmin);
+    public User(String name, String email, String password, Role role, Role... roles) {
+        this(null, name, email, password, EnumSet.of(role, roles));
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = CollectionUtils.isEmpty(roles) ? Collections.emptySet() : EnumSet.copyOf(roles);
     }
 
     public Integer getId() {
@@ -97,14 +112,6 @@ public class User implements HasId, Serializable{
         this.votes = votes;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -112,7 +119,7 @@ public class User implements HasId, Serializable{
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", isAdmin=" + isAdmin +
+                ", roles=" + roles +
                 '}';
     }
 }

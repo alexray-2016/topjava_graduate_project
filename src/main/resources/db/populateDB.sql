@@ -1,16 +1,22 @@
 DELETE FROM DISHES;
 DELETE FROM RESTAURANTS;
 DELETE FROM USER_VOTES;
+DELETE FROM USER_ROLES;
 DELETE FROM USERS;
 ALTER TABLE USERS ALTER COLUMN ID RESTART WITH 1;
 ALTER TABLE RESTAURANTS ALTER COLUMN ID RESTART WITH 1;
 ALTER TABLE DISHES ALTER COLUMN ID RESTART WITH 1;
 ALTER TABLE USER_VOTES ALTER COLUMN ID RESTART WITH 1;
 
-INSERT INTO USERS (NAME, EMAIL, PASSWORD, IS_ADMIN) VALUES
-  ('Admin', 'admin@gmail.com', 'adminpassword', TRUE),
-  ('FirstUser', 'first_user@gmail.com', 'user1password', FALSE),
-  ('SecondUser', 'second_user@gmail.com', 'user2password', FALSE);
+INSERT INTO USERS (NAME, EMAIL, PASSWORD) VALUES
+  ('Admin', 'admin@gmail.com', 'adminpassword'),
+  ('FirstUser', 'first_user@gmail.com', 'user1password'),
+  ('SecondUser', 'second_user@gmail.com', 'user2password');
+
+INSERT INTO USER_ROLES (USER_ID, ROLE) VALUES
+  (1, 'ROLE_ADMIN'),
+  (2, 'ROLE_USER'),
+  (3, 'ROLE_USER');
 
 INSERT INTO RESTAURANTS (NAME) VALUES ('Hof Van Cleve'),
   ('Mugaritz'),
