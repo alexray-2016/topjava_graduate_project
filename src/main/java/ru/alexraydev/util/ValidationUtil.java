@@ -55,7 +55,9 @@ public class ValidationUtil {
         else if (!userVote.getDate().isEqual(LocalDate.now())) {
             throw new UserVoteIncorrectDateException(userVote + " must be with date=" + LocalDate.now());
         }
+    }
 
+    public static void checkTimeConsistent(UserVote userVote) {
         if (userVote.getTime() == null) {
             userVote.setTime(LocalTime.now());
         }

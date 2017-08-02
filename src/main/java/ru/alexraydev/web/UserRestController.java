@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.alexraydev.AuthorizedUser;
+import ru.alexraydev.model.Restaurant;
 import ru.alexraydev.model.UserVote;
 import ru.alexraydev.service.restaurant.RestaurantService;
 import ru.alexraydev.service.uservote.UserVoteService;
@@ -14,6 +15,7 @@ import ru.alexraydev.util.ValidationUtil;
 import ru.alexraydev.util.exception.NotFoundException;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = UserRestController.REST_URL)
@@ -41,6 +43,7 @@ public class UserRestController {
     @PutMapping(value = "/vote", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserVote> update(@RequestBody UserVote entity) throws NotFoundException {
         ValidationUtil.checkDateConsistent(entity);
+        ValidationUtil.checkTimeConsistent(entity);
         UserVote userVote = userVoteService.getTodaysVote(AuthorizedUser.getId());
         ValidationUtil.checkIdConsistent(entity, userVote.getId());
         userVote.setDate(entity.getDate());
@@ -52,10 +55,23 @@ public class UserRestController {
         return new ResponseEntity<>(userVote, HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "/vote")
+    public ResponseEntity<UserVote> delete() throws NotFoundException {
+        UserVote userVote = userVoteService.getTodaysVote(AuthorizedUser.getId());
+        ValidationUtil.checkTimeConsistent(userVote);
+        userVoteService.delete(userVote.getId(), AuthorizedUser.getId());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping(value = "/vote", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserVote> getTodaysVote() throws NotFoundException {
         UserVote userVote = userVoteService.getTodaysVote(AuthorizedUser.getId());
         return new ResponseEntity<>(userVote, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Restaurant>> getAllRestaurants() {
+        return new ResponseEntity<>(restaurantService.getAll(), HttpStatus.OK);
     }
 
 

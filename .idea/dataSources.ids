@@ -11,15 +11,15 @@
       <column name="NAME" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <column name="RESTAURANT_ID" sqlType="INTEGER" precision="32" scale="0" nullable="false" jdbcType="4"/>
       <column name="PRICE" sqlType="INTEGER" precision="32" scale="0" nullable="false" jdbcType="4"/>
-      <primary-key name="SYS_PK_10177" columns="ID"/>
-      <foreign-key name="SYS_FK_10178" columns="RESTAURANT_ID" ref-table="RESTAURANTS" ref-schema="PUBLIC" ref-catalog="PUBLIC" ref-columns="ID" update-rule="3" delete-rule="0" deferrability="2"/>
+      <primary-key name="SYS_PK_10122" columns="ID"/>
+      <foreign-key name="SYS_FK_10126" columns="RESTAURANT_ID" ref-table="RESTAURANTS" ref-schema="PUBLIC" ref-catalog="PUBLIC" ref-columns="ID" update-rule="3" delete-rule="0" deferrability="2"/>
       <index name="DISHES_UNIQUE_ID_RESTAURANT_ID_IDX" unique="true" columns="ID,RESTAURANT_ID"/>
     </table>
     <table name="RESTAURANTS" schema="PUBLIC" catalog="PUBLIC" type="TABLE">
       <column name="ID" sqlType="BIGINT" precision="64" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
       <column name="NAME" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="SYS_PK_10102" columns="ID"/>
-      <exported-key name="SYS_FK_10178" table="DISHES" schema="PUBLIC" catalog="PUBLIC" columns="RESTAURANT_ID"/>
+      <exported-key name="SYS_FK_10126" table="DISHES" schema="PUBLIC" catalog="PUBLIC" columns="RESTAURANT_ID"/>
       <exported-key name="SYS_FK_10112" table="USER_VOTES" schema="PUBLIC" catalog="PUBLIC" columns="CHOSEN_RESTAURANT_ID"/>
     </table>
     <table name="USERS" schema="PUBLIC" catalog="PUBLIC" type="TABLE">

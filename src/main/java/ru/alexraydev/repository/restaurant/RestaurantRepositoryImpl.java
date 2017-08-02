@@ -44,7 +44,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepository{
     @SuppressWarnings("unchecked")
     @Override
     public List<Restaurant> getAll() {
-        Query query = em.createQuery("SELECT r FROM Restaurant r"); //JOIN FETCH r.dishList AS dishes
+        Query query = em.createQuery("SELECT DISTINCT r FROM Restaurant r LEFT JOIN FETCH r.dishList AS dishes");
         return query.getResultList();
     }
 }

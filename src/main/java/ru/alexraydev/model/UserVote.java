@@ -26,6 +26,7 @@ public class UserVote implements HasId, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Integer id;
 
     @Column(name = "date", columnDefinition = "DATE DEFAULT CURRENT_DATE")

@@ -1,21 +1,20 @@
 package ru.alexraydev.model;
 
 import com.fasterxml.jackson.annotation.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.validator.constraints.NotBlank;
 import ru.alexraydev.HasId;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(
         columnNames = {"id", "restaurant_id"}, name = "dishes_unique_id_restaurant_id_idx")})
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "dishes")
 public class Dish implements HasId, Serializable{
 
@@ -31,12 +30,11 @@ public class Dish implements HasId, Serializable{
     @NotNull
     private int price;
 
-    //@JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    //@JsonIgnore
+    @JsonIgnoreProperties("dishList")
     private Restaurant restaurant;
 
     public Dish() {
