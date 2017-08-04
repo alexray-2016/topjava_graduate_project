@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import ru.alexraydev.model.Restaurant;
 import ru.alexraydev.repository.restaurant.RestaurantRepository;
 import ru.alexraydev.util.exception.NotFoundException;
@@ -24,12 +25,14 @@ public class RestaurantServiceImpl implements RestaurantService{
     @CacheEvict(value = "restaurants", allEntries = true)
     @Override
     public Restaurant save(Restaurant entity) {
+        Assert.notNull(entity, "restaurant must not be null");
         return restaurantRepository.save(entity);
     }
 
     @CacheEvict(value = "restaurants", allEntries = true)
     @Override
     public Restaurant update(Restaurant entity) throws NotFoundException {
+        Assert.notNull(entity, "restaurant must not be null");
         return checkNotFoundWithId(restaurantRepository.save(entity), entity.getId());
     }
 

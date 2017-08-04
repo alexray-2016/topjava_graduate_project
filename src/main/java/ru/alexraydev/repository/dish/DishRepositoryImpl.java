@@ -1,5 +1,6 @@
 package ru.alexraydev.repository.dish;
 
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alexraydev.model.Dish;
@@ -28,9 +29,13 @@ public class DishRepositoryImpl implements DishRepository{
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Dish getById(int id) {
-        return em.find(Dish.class, id);
+        List<Dish> dishList = em.createQuery("SELECT d FROM Dish d LEFT JOIN FETCH d.restaurant AS restaurants WHERE d.id=:id")
+                .setParameter("id", id)
+                .getResultList();
+        return DataAccessUtils.singleResult(dishList);
     }
 
     @Override

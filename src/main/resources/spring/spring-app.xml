@@ -9,10 +9,10 @@
        http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <import resource="spring-tools.xml"/>
-    <import resource="spring-security.xml"/>
+   <!-- <import resource="spring-security.xml"/>-->
 
     <context:annotation-config/>
-
     <context:component-scan base-package="ru.alexraydev.service"/>
+    <context:component-scan base-package="ru.alexraydev.util"/>
 
 </beans>

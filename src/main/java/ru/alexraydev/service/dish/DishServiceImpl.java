@@ -2,6 +2,7 @@ package ru.alexraydev.service.dish;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import ru.alexraydev.model.Dish;
 import ru.alexraydev.repository.dish.DishRepository;
 import ru.alexraydev.util.ValidationUtil;
@@ -22,11 +23,13 @@ public class DishServiceImpl implements DishService{
 
     @Override
     public Dish save(Dish entity) {
+        Assert.notNull(entity, "dish must not be null");
         return dishRepository.save(entity);
     }
 
     @Override
     public Dish update(Dish entity) {
+        Assert.notNull(entity, "dish must not be null");
         return checkNotFoundWithId(dishRepository.save(entity), entity.getId());
     }
 

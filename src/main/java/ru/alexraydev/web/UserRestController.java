@@ -14,6 +14,7 @@ import ru.alexraydev.service.uservote.UserVoteService;
 import ru.alexraydev.util.ValidationUtil;
 import ru.alexraydev.util.exception.NotFoundException;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -30,10 +31,10 @@ public class UserRestController {
     private RestaurantService restaurantService;
 
     @PostMapping(value = "/vote", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserVote> save(@RequestBody UserVote entity) {
+    public ResponseEntity<UserVote> save(@Valid @RequestBody UserVote entity) {
         ValidationUtil.checkNew(entity);
 
-        UserVote created = userVoteService.save(entity, AuthorizedUser.id());
+        UserVote created = userVoteService.save(entity, 2/*AuthorizedUser.id()*/);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/vote")
                 .buildAndExpand(created.getId()).toUri();
@@ -41,23 +42,23 @@ public class UserRestController {
     }
 
     @PutMapping(value = "/vote", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserVote> update(@RequestBody UserVote entity) throws NotFoundException {
+    public ResponseEntity<UserVote> update(@Valid @RequestBody UserVote entity) throws NotFoundException {
         ValidationUtil.checkDateConsistent(entity);
         ValidationUtil.checkTimeConsistent(entity);
-        UserVote userVote = userVoteService.getTodaysVote(AuthorizedUser.id());
+        UserVote userVote = userVoteService.getTodaysVote(2/*AuthorizedUser.id()*/);
         ValidationUtil.checkIdConsistent(entity, userVote.getId());
         userVote.setDate(entity.getDate());
         userVote.setTime(entity.getTime());
         userVote.setChosenRestaurantId(entity.getChosenRestaurantId());
         userVote.setUser(entity.getUser());
 
-        userVoteService.update(userVote, AuthorizedUser.id());
+        userVoteService.update(userVote, 2/*AuthorizedUser.id()*/);
         return new ResponseEntity<>(userVote, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/vote")
     public ResponseEntity<UserVote> delete() throws NotFoundException {
-        UserVote userVote = userVoteService.getTodaysVote(AuthorizedUser.id());
+        UserVote userVote = userVoteService.getTodaysVote(2/*AuthorizedUser.id()*/);
         ValidationUtil.checkTimeConsistent(userVote);
         userVoteService.delete(userVote.getId(), AuthorizedUser.id());
         return new ResponseEntity<>(HttpStatus.OK);
@@ -65,7 +66,7 @@ public class UserRestController {
 
     @GetMapping(value = "/vote", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserVote> getTodaysVote() throws NotFoundException {
-        UserVote userVote = userVoteService.getTodaysVote(AuthorizedUser.id());
+        UserVote userVote = userVoteService.getTodaysVote(2/*AuthorizedUser.id()*/);
         return new ResponseEntity<>(userVote, HttpStatus.OK);
     }
 

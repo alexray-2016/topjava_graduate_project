@@ -1,5 +1,6 @@
 package ru.alexraydev.repository.restaurant;
 
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alexraydev.model.Restaurant;
@@ -29,9 +30,13 @@ public class RestaurantRepositoryImpl implements RestaurantRepository{
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Restaurant getById(int id) {
-        return em.find(Restaurant.class, id);
+        List<Restaurant> restaurantList = em.createQuery("SELECT DISTINCT r FROM Restaurant r LEFT JOIN FETCH r.dishList AS dishes WHERE r.id=:id")
+                .setParameter("id", id)
+                .getResultList();
+        return DataAccessUtils.singleResult(restaurantList);
     }
 
     @Override

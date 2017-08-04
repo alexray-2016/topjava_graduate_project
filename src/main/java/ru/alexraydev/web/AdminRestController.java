@@ -10,11 +10,15 @@ import ru.alexraydev.model.Dish;
 import ru.alexraydev.model.Restaurant;
 import ru.alexraydev.service.dish.DishService;
 import ru.alexraydev.service.restaurant.RestaurantService;
+import ru.alexraydev.to.DishTo;
+import ru.alexraydev.util.DishUtils;
 import ru.alexraydev.util.ValidationUtil;
 import ru.alexraydev.util.exception.NotFoundException;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(AdminRestController.REST_URL)
@@ -30,7 +34,7 @@ public class AdminRestController {
 
     //Managing restaurants
     @PostMapping(value = "/restaurants", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> saveRestaurant(@RequestBody Restaurant entity) {
+    public ResponseEntity<Restaurant> saveRestaurant(@Valid @RequestBody Restaurant entity) {
         ValidationUtil.checkNew(entity);
 
         Restaurant created = restaurantService.save(entity);
@@ -41,7 +45,7 @@ public class AdminRestController {
     }
 
     @PutMapping(value = "/restaurants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> updateRestaurant(@PathVariable("id") int id, @RequestBody Restaurant entity) throws NotFoundException {
+    public ResponseEntity<Restaurant> updateRestaurant(@PathVariable("id") int id, @Valid @RequestBody Restaurant entity) throws NotFoundException {
         ValidationUtil.checkIdConsistent(entity, id);
 
         Restaurant restaurant = restaurantService.getById(id);
@@ -80,8 +84,9 @@ public class AdminRestController {
 
     //Managing dishes
     @PostMapping(value = "/dishes", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> saveDish(@RequestBody Dish entity) {
-        ValidationUtil.checkNew(entity);
+    public ResponseEntity<Dish> saveDish(@Valid @RequestBody DishTo dishTo) {
+        ValidationUtil.checkNew(dishTo);
+        Dish entity = DishUtils.createNewDishFromTo(dishTo);
 
         Dish created = dishService.save(entity);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -91,8 +96,9 @@ public class AdminRestController {
     }
 
     @PutMapping(value = "/dishes/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> updateDish(@PathVariable("id") int id, @RequestBody Dish entity) throws NotFoundException {
-        ValidationUtil.checkIdConsistent(entity, id);
+    public ResponseEntity<DishTo> updateDish(@PathVariable("id") int id, @Valid @RequestBody DishTo dishTo) throws NotFoundException {
+        ValidationUtil.checkIdConsistent(dishTo, id);
+        Dish entity = DishUtils.createNewDishFromTo(dishTo);
 
         Dish dish = dishService.getById(id);
 
@@ -101,17 +107,17 @@ public class AdminRestController {
         dish.setRestaurant(entity.getRestaurant());
 
         dishService.update(dish);
-        return new ResponseEntity<>(dish, HttpStatus.OK);
+        return new ResponseEntity<>(DishUtils.asTo(dish), HttpStatus.OK);
     }
 
     @GetMapping(value = "/dishes/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> getDishById(@PathVariable("id") int id) throws NotFoundException {
+    public ResponseEntity<DishTo> getDishById(@PathVariable("id") int id) throws NotFoundException {
         Dish dish = dishService.getById(id);
         if (dish == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         else {
-            return new ResponseEntity<>(dish, HttpStatus.OK);
+            return new ResponseEntity<>(DishUtils.asTo(dish), HttpStatus.OK);
         }
     }
 
@@ -126,7 +132,11 @@ public class AdminRestController {
     }
 
     @GetMapping(value = "/dishes", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Dish>> getAllDishes() {
-        return new ResponseEntity<List<Dish>>(dishService.getAll(), HttpStatus.OK);
+    public ResponseEntity<List<DishTo>> getAllDishes() {
+        List<Dish> dishList = dishService.getAll();
+        List<DishTo> dishToList = dishList.stream()
+                .map(DishUtils::asTo)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(dishToList, HttpStatus.OK);
     }
 }

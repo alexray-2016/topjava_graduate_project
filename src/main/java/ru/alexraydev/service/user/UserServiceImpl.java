@@ -32,12 +32,14 @@ public class UserServiceImpl implements UserService, UserDetailsService{
     @CacheEvict(value = "users", allEntries = true)
     @Override
     public User save(User entity) {
+        Assert.notNull(entity, "user must not be null");
         return userRepository.save(entity);
     }
 
     @CacheEvict(value = "users", allEntries = true)
     @Override
     public User update(User entity) throws NotFoundException {
+        Assert.notNull(entity, "user must not be null");
         return checkNotFoundWithId(userRepository.save(entity), entity.getId());
     }
 
