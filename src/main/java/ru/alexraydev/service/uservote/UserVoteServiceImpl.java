@@ -15,6 +15,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static ru.alexraydev.util.ValidationUtil.checkNotFound;
+import static ru.alexraydev.util.ValidationUtil.checkNotFoundForToday;
 import static ru.alexraydev.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -30,9 +31,6 @@ public class UserVoteServiceImpl implements UserVoteService{
     @Override
     public UserVote save(UserVote entity, int userId) {
         Assert.notNull(entity, "userVote must not be null");
-        entity.setDate(LocalDate.now());
-        entity.setTime(LocalTime.now());
-        //checkIfUserVoteForThisDayAlreadyExists(entity);
         return userVoteRepository.save(entity, userId);
     }
 
@@ -59,17 +57,15 @@ public class UserVoteServiceImpl implements UserVoteService{
 
     @Override
     public UserVote getTodaysVote(int userId) throws NotFoundException {
-        return checkNotFound(userVoteRepository.getTodaysVote(userId),
-                String.format("User with id %d have no userVote for today", userId));
+        return checkNotFoundForToday(userVoteRepository.getTodaysVote(userId),
+                String.format("User with id %d have no user vote for today", userId));
     }
 
-    /*@Override
-    public void checkIfUserVoteForThisDayAlreadyExists(UserVote userVote) throws UserVoteForThisDayAlreadyExistsException {
-        int userId = userVote.getUser().getId();
-        LocalDate date = LocalDate.now();
-        UserVote userVoteFromDB = userVoteRepository.getByDate(userId, date);
+    @Override
+    public void checkIfUserVoteForTodayAlreadyExists(int userId) throws UserVoteForThisDayAlreadyExistsException {
+        UserVote userVoteFromDB = userVoteRepository.getTodaysVote(userId);
         if (userVoteFromDB != null) {
-            throw new UserVoteForThisDayAlreadyExistsException("userVote for user " + userId + " for date " + date + " already exists");
+            throw new UserVoteForThisDayAlreadyExistsException("user vote for user with id=" + userId + " for today already exists");
         }
-    }*/
+    }
 }

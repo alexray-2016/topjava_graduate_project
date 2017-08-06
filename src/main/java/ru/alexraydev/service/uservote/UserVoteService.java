@@ -21,5 +21,5 @@ public interface UserVoteService{
 
     UserVote getTodaysVote(int userId) throws NotFoundException;
 
-    //void checkIfUserVoteForThisDayAlreadyExists(UserVote userVote) throws UserVoteForThisDayAlreadyExistsException;
+    void checkIfUserVoteForTodayAlreadyExists(int userId) throws UserVoteForThisDayAlreadyExistsException;
 }

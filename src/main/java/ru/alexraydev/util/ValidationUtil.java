@@ -33,6 +33,13 @@ public class ValidationUtil {
         }
     }
 
+    public static <T> T checkNotFoundForToday(T object, String msg) {
+        if (object == null) {
+            throw new NotFoundException(msg);
+        }
+        return object;
+    }
+
     public static void checkNew(HasId bean) {
         if (!(bean.getId() == null)) {
             throw new IllegalArgumentException(bean + " must be new (id=null)");
@@ -57,12 +64,28 @@ public class ValidationUtil {
         }
     }
 
-    public static void checkTimeConsistent(UserVote userVote) {
+    public static void checkTimeConsistentForSave(UserVote userVote) {
+        if (userVote.getTime() == null) {
+            LocalTime now = LocalTime.now();
+            if (now.isAfter(LocalTime.of(11, 0))) {
+                throw new UserVoteTooLateException("It is too late, user vote can't be created");
+            }
+            userVote.setTime(now);
+        }
+    }
+
+    public static void checkTimeConsistentForUpdate(UserVote userVote) {
         if (userVote.getTime() == null) {
             userVote.setTime(LocalTime.now());
         }
         if (userVote.getTime().isAfter(LocalTime.of(11, 0))) {
             throw new UserVoteTooLateException("It is too late, vote can't be changed");
+        }
+    }
+
+    public static void checkTimeConsistentForDelete() {
+        if (LocalTime.now().isAfter(LocalTime.of(11, 0))) {
+            throw new UserVoteTooLateException("It is too late, vote can't be deleted");
         }
     }
 

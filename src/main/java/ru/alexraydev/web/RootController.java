@@ -21,16 +21,12 @@ public class RootController {
         return modelAndView;
     }
 
-    /*@PostMapping("/logout")
+    @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        HttpSession session = request.getSession();
         if (auth != null){
-            System.out.println("LOGGING OUT");
             new SecurityContextLogoutHandler().logout(request, response, auth);
-            session.invalidate();
-            SecurityContextHolder.clearContext();
         }
         return "redirect:/";
-    }*/
+    }
 }
