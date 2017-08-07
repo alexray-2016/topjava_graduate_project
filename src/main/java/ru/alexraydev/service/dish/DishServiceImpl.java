@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.alexraydev.model.Dish;
 import ru.alexraydev.repository.dish.DishRepository;
-import ru.alexraydev.util.ValidationUtil;
 import ru.alexraydev.util.exception.NotFoundException;
 import static ru.alexraydev.util.ValidationUtil.*;
 

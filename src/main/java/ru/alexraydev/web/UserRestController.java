@@ -40,7 +40,7 @@ public class UserRestController {
         ValidationUtil.checkDateConsistent(entity);
         ValidationUtil.checkTimeConsistentForSave(entity);
 
-        int userId = 2;/*AuthorizedUser.id()*/
+        int userId = AuthorizedUser.id();
         userVoteService.checkIfUserVoteForTodayAlreadyExists(userId);
         LOG.info("create user vote {} for user with id={}", entity, userId);
         UserVote created = userVoteService.save(entity, userId);
@@ -52,7 +52,7 @@ public class UserRestController {
 
     @PutMapping(value = "/vote", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserVote> update(@Valid @RequestBody UserVote entity) throws NotFoundException {
-        int userId = 2;/*AuthorizedUser.id()*/
+        int userId = AuthorizedUser.id();
         UserVote userVote = userVoteService.getTodaysVote(userId);
         ValidationUtil.checkDateConsistent(entity);
         ValidationUtil.checkTimeConsistentForUpdate(entity);
@@ -69,7 +69,7 @@ public class UserRestController {
 
     @DeleteMapping(value = "/vote")
     public ResponseEntity<UserVote> delete() throws NotFoundException {
-        int userId = 2;/*AuthorizedUser.id()*/
+        int userId = AuthorizedUser.id();
         UserVote userVote = userVoteService.getTodaysVote(userId);
         ValidationUtil.checkTimeConsistentForDelete();
         LOG.info("delete user vote {} for user with id={}", userVote, userId);
@@ -79,7 +79,7 @@ public class UserRestController {
 
     @GetMapping(value = "/vote", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserVote> getTodaysVote() throws NotFoundException {
-        int userId = 2;/*AuthorizedUser.id()*/
+        int userId = AuthorizedUser.id();
         LOG.info("get today's user vote for user with id={}", userId);
         UserVote userVote = userVoteService.getTodaysVote(userId);
         return new ResponseEntity<>(userVote, HttpStatus.OK);
@@ -87,7 +87,7 @@ public class UserRestController {
 
     @GetMapping(value = "/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Restaurant>> getAllRestaurants() {
-        int userId = 2;/*AuthorizedUser.id()*/
+        int userId = AuthorizedUser.id();
         LOG.info("getAll restaurants from user with id={}", userId);
         return new ResponseEntity<>(restaurantService.getAll(), HttpStatus.OK);
     }

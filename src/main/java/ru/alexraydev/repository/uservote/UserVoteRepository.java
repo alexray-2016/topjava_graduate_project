@@ -1,14 +1,11 @@
 package ru.alexraydev.repository.uservote;
 
 import ru.alexraydev.model.UserVote;
-import ru.alexraydev.repository.GenericRepository;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface UserVoteRepository{
-
-    List<UserVote> getAll(int userId);
 
     boolean delete(int id, int userId);
 
@@ -16,7 +13,13 @@ public interface UserVoteRepository{
 
     UserVote save(UserVote entity, int userId);
 
-    //UserVote getByDate(int userId, LocalDate date);
+    List<UserVote> getSortedByDate(String order);
 
     UserVote getTodaysVote(int userId);
+
+    List<UserVote> getFilteredByDate(LocalDate date);
+
+    List<UserVote> getFilteredByRestaurant(int chosenRestaurantId);
+
+    List<UserVote> getFilteredByUser(int userId);
 }

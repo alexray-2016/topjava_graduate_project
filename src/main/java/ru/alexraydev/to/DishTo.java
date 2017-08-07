@@ -2,8 +2,6 @@ package ru.alexraydev.to;
 
 import org.hibernate.validator.constraints.NotBlank;
 import ru.alexraydev.HasId;
-import ru.alexraydev.model.Dish;
-import ru.alexraydev.model.Restaurant;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;

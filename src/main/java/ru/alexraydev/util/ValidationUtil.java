@@ -1,5 +1,6 @@
 package ru.alexraydev.util;
 
+import org.springframework.util.CollectionUtils;
 import ru.alexraydev.HasId;
 import ru.alexraydev.model.UserVote;
 import ru.alexraydev.util.exception.NotFoundException;
@@ -8,6 +9,7 @@ import ru.alexraydev.util.exception.UserVoteTooLateException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public class ValidationUtil {
     private ValidationUtil () {
@@ -97,6 +99,13 @@ public class ValidationUtil {
             result = cause;
         }
         return result;
+    }
+
+    public static List<UserVote> checkUserVotesFiltered (List<UserVote> userVotes, String msg) {
+        if (CollectionUtils.isEmpty(userVotes)) {
+            throw new NotFoundException(msg);
+        }
+        return userVotes;
     }
 
 }

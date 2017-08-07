@@ -30,7 +30,6 @@ public class SpringMain {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
         UserVoteService userVoteService = applicationContext.getBean(UserVoteService.class);
         UserService userService = applicationContext.getBean(UserService.class);
-        System.out.println(userVoteService.getAll(2));
         UserVote userVote = new UserVote(2,userService.getById(2));
         userVote.setDate(LocalDate.of(2017, Month.AUGUST, 1));
         //userVote.setTime(LocalTime.of(20, 0));

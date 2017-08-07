@@ -1,9 +1,7 @@
 package ru.alexraydev.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import ru.alexraydev.model.Dish;
 import ru.alexraydev.service.restaurant.RestaurantService;
 import ru.alexraydev.to.DishTo;

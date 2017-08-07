@@ -3,15 +3,12 @@ package ru.alexraydev.service.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.alexraydev.AuthorizedUser;
-import ru.alexraydev.model.Restaurant;
 import ru.alexraydev.model.User;
-import ru.alexraydev.repository.restaurant.RestaurantRepository;
 import ru.alexraydev.repository.user.UserRepository;
 import ru.alexraydev.util.exception.NotFoundException;
 

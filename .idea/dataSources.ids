@@ -27,7 +27,6 @@
       <column name="NAME" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <column name="EMAIL" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <column name="PASSWORD" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
-      <column name="IS_ADMIN" sqlType="BOOLEAN" precision="0" scale="0" nullable="true" jdbcType="16" def="RkFMU0U="/>
       <primary-key name="SYS_PK_10092" columns="ID"/>
       <exported-key name="SYS_FK_10102" table="USER_ROLES" schema="PUBLIC" catalog="PUBLIC" columns="USER_ID"/>
       <exported-key name="SYS_FK_10118" table="USER_VOTES" schema="PUBLIC" catalog="PUBLIC" columns="USER_ID"/>

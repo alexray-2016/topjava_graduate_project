@@ -2,8 +2,6 @@ package ru.alexraydev.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,18 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import ru.alexraydev.service.restaurant.RestaurantService;
 import ru.alexraydev.util.ValidationUtil;
 import ru.alexraydev.util.exception.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.function.IntFunction;
 
 
 @ControllerAdvice(annotations = RestController.class)

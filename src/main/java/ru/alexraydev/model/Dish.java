@@ -83,18 +83,6 @@ public class Dish implements HasId, Serializable{
         this.restaurant = restaurant;
     }
 
-    /*@JsonProperty("restaurantId")
-    public Integer getRestaurantId() {
-        return restaurant == null ? null : restaurant.getId();
-    }*/
-
-    /*@JsonSetter("restaurantId")
-    public void setRestaurant(int restaurantId) {
-        Restaurant r = new Restaurant();
-        r.setId(restaurantId);
-        this.restaurant = r;
-    }*/
-
     @Override
     public String toString() {
         return "Dish{" +

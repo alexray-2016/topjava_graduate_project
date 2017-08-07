@@ -5,14 +5,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alexraydev.model.User;
 import ru.alexraydev.model.UserVote;
-import ru.alexraydev.repository.GenericRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 @Repository
@@ -41,21 +38,19 @@ public class UserVoteRepositoryImpl implements UserVoteRepository{
 
     @SuppressWarnings("unchecked")
     @Override
+    public List<UserVote> getSortedByDate(String order) {
+        Query query = em.createQuery("SELECT uv FROM UserVote uv LEFT JOIN FETCH uv.user as users ORDER BY uv.date " + (order.toLowerCase().equals("asc") ? "ASC" : "DESC"));
+        return query.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public UserVote getTodaysVote(int userId) {
         List<UserVote> userVotes = em.createQuery("SELECT uv FROM UserVote uv WHERE uv.user.id=:userId AND uv.date=:date")
                 .setParameter("userId", userId)
                 .setParameter("date", LocalDate.now()).getResultList();
         return DataAccessUtils.singleResult(userVotes);
     }
-
-    /*@Override
-    public UserVote getByDate(int userId, LocalDate date) {
-        UserVote userVote = (UserVote)em.createQuery("SELECT uv FROM UserVote uv WHERE uv.user.id=:userId AND uv.date=:date")
-                .setParameter("userId", userId)
-                .setParameter("date", date)
-                .getSingleResult();
-        return userVote;
-    }*/
 
     @Override
     public UserVote getById(int id, int userId) {
@@ -72,8 +67,25 @@ public class UserVoteRepositoryImpl implements UserVoteRepository{
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<UserVote> getAll(int userId) {
-        Query query = em.createQuery("SELECT uv FROM UserVote uv WHERE uv.user.id=:userId");
-        return query.setParameter("userId", userId).getResultList();
+    public List<UserVote> getFilteredByDate(LocalDate date) {
+        Query query = em.createQuery("SELECT uv FROM UserVote uv LEFT JOIN FETCH uv.user as users WHERE uv.date=:date")
+                .setParameter("date", date);
+        return query.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<UserVote> getFilteredByRestaurant(int chosenRestaurantId) {
+        Query query = em.createQuery("SELECT uv FROM UserVote uv LEFT JOIN FETCH uv.user as users WHERE uv.chosenRestaurantId=:chosenRestaurantId")
+                .setParameter("chosenRestaurantId", chosenRestaurantId);
+        return query.getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<UserVote> getFilteredByUser(int userId) {
+        Query query = em.createQuery("SELECT uv FROM UserVote uv LEFT JOIN FETCH uv.user as users WHERE uv.user.id=:userId")
+                .setParameter("userId", userId);
+        return query.getResultList();
     }
 }

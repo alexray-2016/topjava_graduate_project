@@ -1,12 +1,10 @@
 package ru.alexraydev.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 import ru.alexraydev.HasId;
+import ru.alexraydev.util.json.JacksonFilter;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -14,14 +12,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
 @Table(name = "user_votes", uniqueConstraints = {@UniqueConstraint(
         name = "user_votes_unique_user_date_idx", columnNames = {"user_id", "date"})})
-//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "uservotes")
+@JsonFilter("admin-filter")
 public class UserVote implements HasId, Serializable {
 
     @Id
@@ -100,6 +97,12 @@ public class UserVote implements HasId, Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @JacksonFilter.Admin
+    @JsonProperty("userId")
+    public Integer getUserId() {
+        return user == null ? null : user.getId();
     }
 
     @Override
