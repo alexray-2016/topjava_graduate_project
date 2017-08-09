@@ -16,7 +16,8 @@ import java.util.List;
 import static ru.alexraydev.topjava_graduate.UserVoteTestData.*;
 import static ru.alexraydev.topjava_graduate.UserTestData.FIRST_USER_ID;
 import static ru.alexraydev.topjava_graduate.UserTestData.SECOND_USER_ID;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static ru.alexraydev.topjava_graduate.RestaurantTestData.RESTAURANT1;
+import static ru.alexraydev.topjava_graduate.RestaurantTestData.RESTAURANT2;
 
 public class UserVoteServiceTest extends AbstractServiceTest{
 
@@ -37,7 +38,7 @@ public class UserVoteServiceTest extends AbstractServiceTest{
 
     @Test
     public void testSave() throws Exception {
-        UserVote created = new UserVote(LocalDate.now(), LocalTime.of(10, 0), 1);
+        UserVote created = new UserVote(LocalDate.now(), LocalTime.of(10, 0), RESTAURANT1);
         service.save(created, FIRST_USER_ID);
         MATCHER.assertCollectionEquals(Arrays.asList(USERVOTE1, USERVOTE2, USERVOTE3, USERVOTE4, USERVOTE5, created), service.getFilteredByUser(FIRST_USER_ID));
     }
@@ -55,14 +56,14 @@ public class UserVoteServiceTest extends AbstractServiceTest{
 
     @Test
     public void testUpdate() throws Exception {
-        UserVote updated = new UserVote(USERVOTE1.getId(), USERVOTE1.getDate(), USERVOTE1.getTime(), 2);
+        UserVote updated = new UserVote(USERVOTE1.getId(), USERVOTE1.getDate(), USERVOTE1.getTime(), RESTAURANT2);
         service.update(updated, FIRST_USER_ID);
         MATCHER.assertEquals(updated, service.getById(USERVOTE1.getId(), FIRST_USER_ID));
     }
 
     @Test(expected = NotFoundException.class)
     public void testUpdateNotFound() throws Exception {
-        service.update(new UserVote(100500, LocalDate.now(), LocalTime.now(), 2), FIRST_USER_ID);
+        service.update(new UserVote(100500, LocalDate.now(), LocalTime.now(), RESTAURANT2), FIRST_USER_ID);
     }
 
     @Test
@@ -89,6 +90,6 @@ public class UserVoteServiceTest extends AbstractServiceTest{
     public void testGetFilteredByRestaurant() throws Exception {
         int chosenRestaurantId = 1;
         List<UserVote> userVotes = service.getFilteredByRestaurant(chosenRestaurantId);
-        userVotes.forEach(uv -> Assert.assertTrue(uv.getChosenRestaurantId() == chosenRestaurantId));
+        userVotes.forEach(uv -> Assert.assertTrue(uv.getRestaurant().getId() == chosenRestaurantId));
     }
 }

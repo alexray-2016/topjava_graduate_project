@@ -33,9 +33,11 @@ public class UserVote implements HasId, Serializable {
     @JsonIgnore
     private LocalTime time;
 
-    @Column(name = "chosen_restaurant_id", nullable = false, unique = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chosen_restaurant_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    private Integer chosenRestaurantId;
+    private Restaurant restaurant;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -47,15 +49,15 @@ public class UserVote implements HasId, Serializable {
     public UserVote() {
     }
 
-    public UserVote(Integer id, LocalDate date, LocalTime time, Integer chosenRestaurantId) {
+    public UserVote(Integer id, LocalDate date, LocalTime time, Restaurant restaurant) {
         this.id = id;
         this.date = date;
         this.time = time;
-        this.chosenRestaurantId = chosenRestaurantId;
+        this.restaurant = restaurant;
     }
 
-    public UserVote(LocalDate date, LocalTime time, Integer chosenRestaurantId) {
-        this(null, date, time, chosenRestaurantId);
+    public UserVote(LocalDate date, LocalTime time, Restaurant restaurant) {
+        this(null, date, time, restaurant);
     }
 
     @Override
@@ -84,20 +86,20 @@ public class UserVote implements HasId, Serializable {
         this.time = time;
     }
 
-    public Integer getChosenRestaurantId() {
-        return chosenRestaurantId;
-    }
-
-    public void setChosenRestaurantId(Integer chosenRestaurantId) {
-        this.chosenRestaurantId = chosenRestaurantId;
-    }
-
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     @JacksonFilter.Admin
@@ -112,7 +114,6 @@ public class UserVote implements HasId, Serializable {
                 "id=" + id +
                 ", date=" + date +
                 ", time=" + time +
-                ", chosenRestaurantId=" + chosenRestaurantId +
                 '}';
     }
 }

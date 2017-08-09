@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.alexraydev.topjava_graduate.model.Dish;
 import ru.alexraydev.topjava_graduate.model.Restaurant;
-import ru.alexraydev.topjava_graduate.model.UserVote;
 import ru.alexraydev.topjava_graduate.service.dish.DishService;
 import ru.alexraydev.topjava_graduate.service.restaurant.RestaurantService;
 import ru.alexraydev.topjava_graduate.service.uservote.UserVoteService;
 import ru.alexraydev.topjava_graduate.to.DishTo;
-import ru.alexraydev.topjava_graduate.util.DishUtils;
+import ru.alexraydev.topjava_graduate.to.UserVoteTo;
+import ru.alexraydev.topjava_graduate.util.DishUtil;
+import ru.alexraydev.topjava_graduate.util.UserVoteUtil;
 import ru.alexraydev.topjava_graduate.util.ValidationUtil;
 import ru.alexraydev.topjava_graduate.util.exception.NotFoundException;
 
@@ -92,22 +93,22 @@ public class AdminRestController {
 
     //Managing dishes
     @PostMapping(value = "/dishes", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> saveDish(@Valid @RequestBody DishTo dishTo) {
+    public ResponseEntity<DishTo> saveDish(@Valid @RequestBody DishTo dishTo) {
         ValidationUtil.checkNew(dishTo);
-        Dish entity = DishUtils.createNewDishFromTo(dishTo);
+        Dish entity = DishUtil.createNewDishFromTo(dishTo);
 
         LOG.info("create {}", entity);
         Dish created = dishService.save(entity);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
-        return ResponseEntity.created(uriOfNewResource).body(created);
+        return ResponseEntity.created(uriOfNewResource).body(DishUtil.asTo(created));
     }
 
     @PutMapping(value = "/dishes/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DishTo> updateDish(@PathVariable("id") int id, @Valid @RequestBody DishTo dishTo) throws NotFoundException {
         ValidationUtil.checkIdConsistent(dishTo, id);
-        Dish entity = DishUtils.createNewDishFromTo(dishTo);
+        Dish entity = DishUtil.createNewDishFromTo(dishTo);
 
         Dish dish = dishService.getById(id);
 
@@ -117,14 +118,14 @@ public class AdminRestController {
 
         LOG.info("update {} with id={}", entity, id);
         dishService.update(dish);
-        return new ResponseEntity<>(DishUtils.asTo(dish), HttpStatus.OK);
+        return new ResponseEntity<>(DishUtil.asTo(dish), HttpStatus.OK);
     }
 
     @GetMapping(value = "/dishes/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DishTo> getDishById(@PathVariable("id") int id) throws NotFoundException {
         LOG.info("get dish with id={}", id);
         Dish dish = dishService.getById(id);
-        return new ResponseEntity<>(DishUtils.asTo(dish), HttpStatus.OK);
+        return new ResponseEntity<>(DishUtil.asTo(dish), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/dishes/{id}")
@@ -138,16 +139,12 @@ public class AdminRestController {
     @GetMapping(value = "/dishes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DishTo>> getAllDishes() {
         LOG.info("get all dishes");
-        List<Dish> dishList = dishService.getAll();
-        List<DishTo> dishToList = dishList.stream()
-                .map(DishUtils::asTo)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(dishToList, HttpStatus.OK);
+        return new ResponseEntity<>(DishUtil.asToList(dishService.getAll()), HttpStatus.OK);
     }
 
     //Managing user votes
     @GetMapping(value = "/votes", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<UserVote>> getAllVotesFiltered(
+    public ResponseEntity<List<UserVoteTo>> getAllVotesFiltered(
             @RequestParam(value = "sort", required = false) String order,
             @RequestParam(value = "date", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
@@ -155,17 +152,17 @@ public class AdminRestController {
             @RequestParam(value = "userId", required = false) Integer userId) {
         if (userId != null) {
             LOG.info("get votes filtered by user");
-            return new ResponseEntity<>(userVoteService.getFilteredByUser(userId), HttpStatus.OK);
+            return new ResponseEntity<>(UserVoteUtil.asToList(userVoteService.getFilteredByUser(userId)), HttpStatus.OK);
         }
         if (chosenRestaurantId != null) {
             LOG.info("get votes filtered by restaurant");
-            return new ResponseEntity<>(userVoteService.getFilteredByRestaurant(chosenRestaurantId), HttpStatus.OK);
+            return new ResponseEntity<>(UserVoteUtil.asToList(userVoteService.getFilteredByRestaurant(chosenRestaurantId)), HttpStatus.OK);
         }
         if (date != null) {
             LOG.info("get votes filtered by date");
-            return new ResponseEntity<>(userVoteService.getFilteredByDate(date), HttpStatus.OK);
+            return new ResponseEntity<>(UserVoteUtil.asToList(userVoteService.getFilteredByDate(date)), HttpStatus.OK);
         }
         LOG.info("get all votes sorted by date");
-        return new ResponseEntity<>(userVoteService.getSortedByDate(order == null ? "" : order), HttpStatus.OK);
+        return new ResponseEntity<>(UserVoteUtil.asToList(userVoteService.getSortedByDate(order == null ? "" : order)), HttpStatus.OK);
     }
 }

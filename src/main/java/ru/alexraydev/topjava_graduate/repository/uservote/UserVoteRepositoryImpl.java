@@ -39,14 +39,14 @@ public class UserVoteRepositoryImpl implements UserVoteRepository{
     @SuppressWarnings("unchecked")
     @Override
     public List<UserVote> getSortedByDate(String order) {
-        Query query = em.createQuery("SELECT uv FROM UserVote uv LEFT JOIN FETCH uv.user as users ORDER BY uv.date " + (order.toLowerCase().equals("asc") ? "ASC" : "DESC"));
+        Query query = em.createQuery("SELECT uv FROM UserVote uv LEFT JOIN FETCH uv.user as users LEFT JOIN FETCH uv.restaurant AS restaurants ORDER BY uv.date " + (order.toLowerCase().equals("asc") ? "ASC" : "DESC"));
         return query.getResultList();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public UserVote getTodaysVote(int userId) {
-        List<UserVote> userVotes = em.createQuery("SELECT uv FROM UserVote uv WHERE uv.user.id=:userId AND uv.date=:date")
+        List<UserVote> userVotes = em.createQuery("SELECT uv FROM UserVote uv LEFT JOIN FETCH uv.restaurant AS restaurants WHERE uv.user.id=:userId AND uv.date=:date")
                 .setParameter("userId", userId)
                 .setParameter("date", LocalDate.now()).getResultList();
         return DataAccessUtils.singleResult(userVotes);
@@ -68,7 +68,7 @@ public class UserVoteRepositoryImpl implements UserVoteRepository{
     @SuppressWarnings("unchecked")
     @Override
     public List<UserVote> getFilteredByDate(LocalDate date) {
-        Query query = em.createQuery("SELECT uv FROM UserVote uv LEFT JOIN FETCH uv.user as users WHERE uv.date=:date")
+        Query query = em.createQuery("SELECT uv FROM UserVote uv LEFT JOIN FETCH uv.user as users LEFT JOIN FETCH uv.restaurant AS restaurants WHERE uv.date=:date")
                 .setParameter("date", date);
         return query.getResultList();
     }
@@ -76,7 +76,7 @@ public class UserVoteRepositoryImpl implements UserVoteRepository{
     @SuppressWarnings("unchecked")
     @Override
     public List<UserVote> getFilteredByRestaurant(int chosenRestaurantId) {
-        Query query = em.createQuery("SELECT uv FROM UserVote uv LEFT JOIN FETCH uv.user as users WHERE uv.chosenRestaurantId=:chosenRestaurantId")
+        Query query = em.createQuery("SELECT uv FROM UserVote uv LEFT JOIN FETCH uv.user as users LEFT JOIN FETCH uv.restaurant AS restaurants WHERE uv.restaurant.id=:chosenRestaurantId")
                 .setParameter("chosenRestaurantId", chosenRestaurantId);
         return query.getResultList();
     }

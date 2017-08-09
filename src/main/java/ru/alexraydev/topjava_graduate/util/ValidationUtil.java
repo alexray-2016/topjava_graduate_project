@@ -3,6 +3,7 @@ package ru.alexraydev.topjava_graduate.util;
 import org.springframework.util.CollectionUtils;
 import ru.alexraydev.topjava_graduate.HasId;
 import ru.alexraydev.topjava_graduate.model.UserVote;
+import ru.alexraydev.topjava_graduate.to.UserVoteTo;
 import ru.alexraydev.topjava_graduate.util.exception.NotFoundException;
 import ru.alexraydev.topjava_graduate.util.exception.UserVoteIncorrectDateException;
 import ru.alexraydev.topjava_graduate.util.exception.UserVoteTooLateException;
@@ -57,7 +58,7 @@ public class ValidationUtil {
         }
     }
 
-    public static void checkDateConsistent(UserVote userVote) {
+    public static void checkDateConsistent(UserVoteTo userVote) {
         if (userVote.getDate() == null) {
             userVote.setDate(LocalDate.now());
         }
@@ -66,7 +67,7 @@ public class ValidationUtil {
         }
     }
 
-    public static void checkTimeConsistentForSave(UserVote userVote) {
+    public static void checkTimeConsistentForSave(UserVoteTo userVote) {
         if (userVote.getTime() == null) {
             LocalTime now = LocalTime.now();
             if (now.isAfter(LocalTime.of(11, 0))) {
@@ -76,7 +77,7 @@ public class ValidationUtil {
         }
     }
 
-    public static void checkTimeConsistentForUpdate(UserVote userVote) {
+    public static void checkTimeConsistentForUpdate(UserVoteTo userVote) {
         if (userVote.getTime() == null) {
             userVote.setTime(LocalTime.now());
         }
