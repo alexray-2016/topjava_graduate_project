@@ -56,6 +56,7 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.9" />
           <element id="library" level="project" name="Maven: org.apache.tomcat:servlet-api:6.0.53" />
           <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:3.1.0" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-test:4.2.2.RELEASE" />
         </element>
       </element>
       <element id="directory" name="META-INF">

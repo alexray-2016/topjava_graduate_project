@@ -15,7 +15,7 @@
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <context:component-scan base-package="ru.alexraydev.repository"/>
+    <context:component-scan base-package="ru.alexraydev.topjava_graduate.repository"/>
 
     <jdbc:initialize-database data-source="dataSource" enabled="${database.init}">
         <jdbc:script encoding="utf-8" location="classpath:db/${jdbc.initLocation}"/>
@@ -33,7 +33,7 @@
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
             p:dataSource-ref="dataSource"
-            p:packagesToScan="ru.alexraydev.model">
+            p:packagesToScan="ru.alexraydev.topjava_graduate.model">
         <property name="jpaPropertyMap">
             <map>
                 <entry key="#{T(org.hibernate.cfg.AvailableSettings).FORMAT_SQL}" value="${hibernate.format_sql}"/>

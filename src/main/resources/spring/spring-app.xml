@@ -12,7 +12,7 @@
     <import resource="spring-security.xml"/>
 
     <context:annotation-config/>
-    <context:component-scan base-package="ru.alexraydev.service"/>
-    <context:component-scan base-package="ru.alexraydev.util"/>
+    <context:component-scan base-package="ru.alexraydev.topjava_graduate.service"/>
+    <context:component-scan base-package="ru.alexraydev.topjava_graduate.util"/>
 
 </beans>
