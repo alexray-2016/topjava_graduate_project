@@ -203,14 +203,14 @@
         <!--Web-->
         <dependency>
             <groupId>org.apache.tomcat</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>6.0.53</version>
+            <artifactId>tomcat-servlet-api</artifactId>
+            <version>8.5.5</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
-        </dependency>
+        </dependency>-->
 
         <!--Test-->
         <dependency>
@@ -232,11 +232,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>

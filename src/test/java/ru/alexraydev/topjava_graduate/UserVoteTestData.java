@@ -2,6 +2,7 @@ package ru.alexraydev.topjava_graduate;
 
 import ru.alexraydev.topjava_graduate.matcher.ModelMatcher;
 import ru.alexraydev.topjava_graduate.model.UserVote;
+import ru.alexraydev.topjava_graduate.to.UserVoteTo;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,6 +14,7 @@ import static ru.alexraydev.topjava_graduate.RestaurantTestData.RESTAURANT2;
 
 public class UserVoteTestData {
     public static final ModelMatcher<UserVote> MATCHER = ModelMatcher.of(UserVote.class);
+    public static final ModelMatcher<UserVoteTo> TO_MATCHER = ModelMatcher.of(UserVoteTo.class);
 
     //USER1 votes
     public static final UserVote USERVOTE1 = new UserVote(1, LocalDate.of(2017, 8, 1), LocalTime.of(10,0), RESTAURANT1);

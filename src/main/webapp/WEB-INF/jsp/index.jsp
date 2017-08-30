@@ -22,9 +22,9 @@
     <br>DELETE /rest/admin/dishes/{id} -  delete dish with id={id}
     <br>PUT /rest/admin/dishes/{id} -  update dish with id={id}
     <br><br>GET /votes - get history of user votes
-    <br><br>GET /votes?sort={asc}/{desc} - get history of user votes in descending or ascending order (default if descending)
-    <br><br>GET /votes?date={date} - get history of user votes filtered by date (in format "yyyy-MM-dd")
-    <br><br>GET /votes?restaurantId={id} - get history of user votes filtered by restaurant
-    <br><br>GET /votes?userId={id} - get history of user votes filtered by user
+    <br>GET /votes?sort={asc}/{desc} - get history of user votes in descending or ascending order (default is descending)
+    <br>GET /votes?date={date} - get history of user votes filtered by date (in format "yyyy-MM-dd")
+    <br>GET /votes?restaurantId={id} - get history of user votes filtered by restaurant
+    <br>GET /votes?userId={id} - get history of user votes filtered by user
   </body>
 </html>

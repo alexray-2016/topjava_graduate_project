@@ -57,4 +57,5 @@
           p:dataSource-ref="dataSource"/>
 
     <tx:annotation-driven proxy-target-class="true"/>
+    <bean class="ru.alexraydev.topjava_graduate.util.CacheEvictUtil"/>
 </beans>
