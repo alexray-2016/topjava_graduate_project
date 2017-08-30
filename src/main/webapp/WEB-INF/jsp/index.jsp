@@ -26,6 +26,6 @@
     <br>GET /votes?date={date} - get history of user votes filtered by date (in format "yyyy-MM-dd")
     <br>GET /votes?restaurantId={id} - get history of user votes filtered by restaurant
     <br>GET /votes?userId={id} - get history of user votes filtered by user
-    <br>
+
   </body>
 </html>
